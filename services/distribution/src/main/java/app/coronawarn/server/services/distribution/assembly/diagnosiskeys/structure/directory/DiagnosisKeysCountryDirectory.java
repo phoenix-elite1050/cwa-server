@@ -47,9 +47,9 @@ public class DiagnosisKeysCountryDirectory extends IndexDirectoryOnDisk<String> 
    * @param cryptoProvider      The {@link CryptoProvider} used for payload signing.
    */
   public DiagnosisKeysCountryDirectory(DiagnosisKeyBundler diagnosisKeyBundler,
-      CryptoProvider cryptoProvider, DistributionServiceConfig distributionServiceConfig) {
+      CryptoProvider cryptoProvider, DistributionServiceConfig distributionServiceConfig, String countryCode) {
     super(distributionServiceConfig.getApi().getCountryPath(), ignoredValue ->
-        Set.of(distributionServiceConfig.getApi().getCountryGermany()), Object::toString);
+        Set.of(countryCode), Object::toString);
     this.diagnosisKeyBundler = diagnosisKeyBundler;
     this.cryptoProvider = cryptoProvider;
     this.distributionServiceConfig = distributionServiceConfig;

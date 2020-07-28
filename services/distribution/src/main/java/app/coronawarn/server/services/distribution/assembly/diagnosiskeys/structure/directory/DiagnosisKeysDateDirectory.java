@@ -91,6 +91,7 @@ public class DiagnosisKeysDateDirectory extends IndexDirectoryOnDisk<LocalDate> 
     long startTimestamp = currentDate.atStartOfDay().toEpochSecond(ZoneOffset.UTC);
     long endTimestamp = currentDate.plusDays(1).atStartOfDay().toEpochSecond(ZoneOffset.UTC);
 
+    // @POC: Could add parameter for batch_num / batch_size here
     File<WritableOnDisk> temporaryExposureKeyExportFile = TemporaryExposureKeyExportFile.fromDiagnosisKeys(
         diagnosisKeysForCurrentHour, region, startTimestamp, endTimestamp, distributionServiceConfig);
 

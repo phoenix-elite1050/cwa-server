@@ -114,6 +114,7 @@ public class TemporaryExposureKeyExportFile extends FileOnDiskWithChecksum {
     return concatenatedBytes;
   }
 
+  // @POC: Change the hardcoded number
   private byte[] createTemporaryExposureKeyExportBytes() {
     return TemporaryExposureKeyExport.newBuilder()
         .setStartTimestamp(this.startTimestamp)

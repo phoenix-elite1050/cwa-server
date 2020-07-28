@@ -29,6 +29,7 @@ import app.coronawarn.server.services.distribution.assembly.structure.directory.
 import app.coronawarn.server.services.distribution.assembly.structure.directory.IndexDirectory;
 import app.coronawarn.server.services.distribution.assembly.structure.directory.IndexDirectoryOnDisk;
 import app.coronawarn.server.services.distribution.assembly.structure.directory.decorator.indexing.IndexingDecoratorOnDisk;
+import app.coronawarn.server.services.distribution.assembly.structure.file.FileOnDiskWithChecksum;
 import app.coronawarn.server.services.distribution.assembly.structure.util.ImmutableStack;
 import app.coronawarn.server.services.distribution.config.DistributionServiceConfig;
 
@@ -62,8 +63,14 @@ public class DiagnosisKeysDirectory extends DirectoryOnDisk {
 
   @Override
   public void prepare(ImmutableStack<Object> indices) {
-    this.addWritable(decorateCountryDirectory(
-        new DiagnosisKeysCountryDirectory(diagnosisKeyBundler, cryptoProvider, distributionServiceConfig)));
+//    distributionServiceConfig.getApi().getCountryGermany();
+    this.addWritable(new DiagnosisKeysCountryDirectory(diagnosisKeyBundler, cryptoProvider, distributionServiceConfig, "DE"));
+    this.addWritable(new DiagnosisKeysCountryDirectory(diagnosisKeyBundler, cryptoProvider, distributionServiceConfig, "FR"));
+    this.addWritable(new DiagnosisKeysCountryDirectory(diagnosisKeyBundler, cryptoProvider, distributionServiceConfig, "DK"));
+    this.addWritable(new DiagnosisKeysCountryDirectory(diagnosisKeyBundler, cryptoProvider, distributionServiceConfig, "LU"));
+    this.addWritable(new FileOnDiskWithChecksum("index", "[\"DE\",\"DK\",\"FR\",\"LU\"]".getBytes()));
+//    this.addWritable(decorateCountryDirectory(
+//        ));
     super.prepare(indices);
   }
 
@@ -71,4 +78,5 @@ public class DiagnosisKeysDirectory extends DirectoryOnDisk {
       IndexDirectoryOnDisk<String> countryDirectory) {
     return new IndexingDecoratorOnDisk<>(countryDirectory, distributionServiceConfig.getOutputFileName());
   }
+
 }
