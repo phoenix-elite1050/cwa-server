@@ -46,4 +46,14 @@ message TemporaryExposureKey {
   // Increments of 10 minutes describing how long a key is valid
   optional int32 rolling_period = 4
       [default = 144]; // defaults to 24 hours
+  optional string visitedCountries = 5;
+  // country of origin
+  optional string origin = 6;
+  optional VerificationType verificationType = 7;
 }
+enum VerificationType {
+  LAB_VERIFIED = 0;
+  SELF_REPORTED = 1;
+}
+
+
