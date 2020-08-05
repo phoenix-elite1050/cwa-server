@@ -81,6 +81,8 @@ public class RequestExecutor {
         .contentTypeProtoBuf()
         .cwaAuth()
         .withoutCwaFake()
+        .withoutCwaSharedConsent()
+        .withoutCwaTravel()
         .build();
   }
 

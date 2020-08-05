@@ -86,19 +86,22 @@ public class SubmissionController {
   @Timed(description = "Time spent handling submission.")
   public DeferredResult<ResponseEntity<Void>> submitDiagnosisKey(
       @ValidSubmissionPayload @RequestBody SubmissionPayload exposureKeys,
-      @RequestHeader("cwa-authorization") String tan) {
+      @RequestHeader("cwa-authorization") String tan,
+      @RequestHeader(value = "cwa-traveler") boolean traveler,
+      @RequestHeader(value = "cwa-shared-consent") boolean sharedConsent) {
     submissionMonitor.incrementRequestCounter();
     submissionMonitor.incrementRealRequestCounter();
-    return buildRealDeferredResult(exposureKeys, tan);
+    return buildRealDeferredResult(exposureKeys, SubmissionHeaders.of(tan, traveler, sharedConsent));
   }
 
-  private DeferredResult<ResponseEntity<Void>> buildRealDeferredResult(SubmissionPayload exposureKeys, String tan) {
+  private DeferredResult<ResponseEntity<Void>> buildRealDeferredResult(SubmissionPayload exposureKeys,
+      SubmissionHeaders submissionHeaders) {
     DeferredResult<ResponseEntity<Void>> deferredResult = new DeferredResult<>();
 
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
     try {
-      if (!this.tanVerifier.verifyTan(tan)) {
+      if (!this.tanVerifier.verifyTan(submissionHeaders.getTan())) {
         submissionMonitor.incrementInvalidTanRequestCounter();
         deferredResult.setResult(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
       } else {
