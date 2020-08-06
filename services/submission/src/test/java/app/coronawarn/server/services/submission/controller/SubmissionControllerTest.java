@@ -26,7 +26,12 @@ import static app.coronawarn.server.services.submission.controller.RequestExecut
 import static app.coronawarn.server.services.submission.controller.RequestExecutor.buildPayloadWithOneKey;
 import static app.coronawarn.server.services.submission.controller.RequestExecutor.buildTemporaryExposureKey;
 import static app.coronawarn.server.services.submission.controller.RequestExecutor.createRollingStartIntervalNumber;
-import static app.coronawarn.server.services.submission.controller.SubmissionPayloadMockData.*;
+import static app.coronawarn.server.services.submission.controller.SubmissionPayloadMockData.buildPayload;
+import static app.coronawarn.server.services.submission.controller.SubmissionPayloadMockData.buildPayloadWithInvalidKey;
+import static app.coronawarn.server.services.submission.controller.SubmissionPayloadMockData.buildPayloadWithInvalidOriginCountry;
+import static app.coronawarn.server.services.submission.controller.SubmissionPayloadMockData.buildPayloadWithInvalidVisitedCountries;
+import static app.coronawarn.server.services.submission.controller.SubmissionPayloadMockData.buildPayloadWithPadding;
+import static app.coronawarn.server.services.submission.controller.SubmissionPayloadMockData.buildPayloadWithTooLargePadding;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.any;
@@ -94,10 +99,19 @@ class SubmissionControllerTest {
   @Autowired
   private SubmissionServiceConfig config;
 
+  private HttpHeaders travelerHeaders;
+
   @BeforeEach
   public void setUpMocks() {
     when(tanVerifier.verifyTan(anyString())).thenReturn(true);
     when(fakeDelayManager.getJitteredFakeDelay()).thenReturn(1000L);
+    travelerHeaders = HttpHeaderBuilder.builder()
+        .contentTypeProtoBuf()
+        .cwaAuth()
+        .withCwaFake()
+        .withCwaTravel()
+        .withoutCwaSharedConsent()
+        .build();
   }
 
   @Test
@@ -224,6 +238,18 @@ class SubmissionControllerTest {
     ResponseEntity<Void> actResponse = executor.executePost(buildPayloadWithInvalidVisitedCountries());
     // visited countries is an optional information, thus the application must ignore in case invalid
     assertThat(actResponse.getStatusCode()).isEqualTo(OK);
+  }
+
+  @Test
+    //TODO:: Make this test pass
+  void testVisitedCountriesArePopulatedBasedOnTheTravelerFlag() {
+    ResponseEntity<Void> actResponse = executor.executePost(buildPayload(buildMultipleKeys()), travelerHeaders);
+    assertThat(actResponse.getStatusCode()).isEqualTo(OK);
+    assertThat(diagnosisKeyService.getDiagnosisKeys().stream()
+        .map(DiagnosisKey::getVisitedCountries)
+        .flatMap(List::stream)
+        .collect(Collectors.toList()))
+        .isEqualTo(List.of("DE", "FR", "UK", "DK"));
   }
 
   @Test

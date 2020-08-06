@@ -57,8 +57,18 @@ public class HttpHeaderBuilder {
     return this;
   }
 
+  public HttpHeaderBuilder withCwaTravel() {
+    headers.set("cwa-traveler", "true");
+    return this;
+  }
+
   public HttpHeaderBuilder withoutCwaSharedConsent() {
     headers.set("cwa-shared-consent", "false");
+    return this;
+  }
+
+  public HttpHeaderBuilder withoCwaSharedConsent() {
+    headers.set("cwa-shared-consent", "true");
     return this;
   }
 

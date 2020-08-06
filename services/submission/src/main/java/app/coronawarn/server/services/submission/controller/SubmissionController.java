@@ -31,6 +31,7 @@ import app.coronawarn.server.services.submission.verification.TanVerifier;
 import io.micrometer.core.annotation.Timed;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 import org.slf4j.Logger;
@@ -63,16 +64,19 @@ public class SubmissionController {
   private final Integer retentionDays;
   private final Integer randomKeyPaddingMultiplier;
   private final FakeDelayManager fakeDelayManager;
+  private final SubmissionServiceConfig submissionServiceConfig;
 
   SubmissionController(
       DiagnosisKeyService diagnosisKeyService, TanVerifier tanVerifier, FakeDelayManager fakeDelayManager,
-      SubmissionServiceConfig submissionServiceConfig, SubmissionMonitor submissionMonitor) {
+      SubmissionServiceConfig submissionServiceConfig, SubmissionMonitor submissionMonitor,
+      SubmissionServiceConfig submissionServiceConfig1) {
     this.diagnosisKeyService = diagnosisKeyService;
     this.tanVerifier = tanVerifier;
     this.submissionMonitor = submissionMonitor;
     this.fakeDelayManager = fakeDelayManager;
     retentionDays = submissionServiceConfig.getRetentionDays();
     randomKeyPaddingMultiplier = submissionServiceConfig.getRandomKeyPaddingMultiplier();
+    this.submissionServiceConfig = submissionServiceConfig1;
   }
 
   /**
@@ -134,6 +138,7 @@ public class SubmissionController {
       DiagnosisKey diagnosisKey = DiagnosisKey.builder()
           .fromProtoBuf(protoBufferKey)
           .withSharedConsent(submissionHeaders.isSharedConsent())
+          .withVisitedCountries(getCountries(submissionHeaders))
           .build();
       if (diagnosisKey.isYoungerThanRetentionThreshold(retentionDays)) {
         diagnosisKeys.add(diagnosisKey);
@@ -143,6 +148,10 @@ public class SubmissionController {
     }
 
     diagnosisKeyService.saveDiagnosisKeys(padDiagnosisKeys(diagnosisKeys));
+  }
+
+  private List<String> getCountries(SubmissionHeaders submissionHeaders) {
+    return submissionHeaders.isTraveler() ? submissionServiceConfig.getAllowedCountries() : Collections.emptyList();
   }
 
   private List<DiagnosisKey> padDiagnosisKeys(List<DiagnosisKey> diagnosisKeys) {

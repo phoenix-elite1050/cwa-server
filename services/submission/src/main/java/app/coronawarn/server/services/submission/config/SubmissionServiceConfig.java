@@ -137,6 +137,13 @@ public class SubmissionServiceConfig {
     return true;
   }
 
+  /**
+   * @return A list of the whitelisted countries.
+   */
+  public List<String> getAllowedCountries() {
+    return Arrays.asList(payload.getAllowedCountries());
+  }
+
   public void setPayload(Payload payload) {
     this.payload = payload;
   }
