@@ -85,6 +85,15 @@ interface DiagnosisKeyBuilders {
     FinalBuilder withVisitedCountries(List<String> visitedCountries);
 
     /**
+     * Adds the specified shared consent to this builder.
+     *
+     * @param sharedConsent consent that the key can be shared with other countries
+     *                     associated with the person this key came from.
+     * @return this Builder instance.
+     */
+    FinalBuilder withSharedConsent(boolean sharedConsent);
+
+    /**
      * Adds the specified rolling period to this builder. If not specified, the rolling period defaults to {@link
      * DiagnosisKey#EXPECTED_ROLLING_PERIOD}
      *

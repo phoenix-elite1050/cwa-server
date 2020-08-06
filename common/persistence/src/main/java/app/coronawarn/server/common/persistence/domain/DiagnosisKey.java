@@ -75,12 +75,14 @@ public class DiagnosisKey {
 
   private final List<String> visitedCountries;
 
+  private final boolean sharedConsent;
+
   /**
    * Should be called by builders.
    */
   DiagnosisKey(byte[] keyData, int rollingStartIntervalNumber, int rollingPeriod,
       int transmissionRiskLevel, long submissionTimestamp,
-      @Size String originCountry, List<String> visitedCountries) {
+      @Size String originCountry, List<String> visitedCountries, boolean sharedConsent) {
     this.keyData = keyData;
     this.rollingStartIntervalNumber = rollingStartIntervalNumber;
     this.rollingPeriod = rollingPeriod;
@@ -88,6 +90,7 @@ public class DiagnosisKey {
     this.submissionTimestamp = submissionTimestamp;
     this.originCountry = originCountry;
     this.visitedCountries = visitedCountries == null ? Collections.emptyList() : visitedCountries;
+    this.sharedConsent = sharedConsent;
   }
 
   /**
@@ -163,6 +166,10 @@ public class DiagnosisKey {
     return this.rollingStartIntervalNumber >= threshold;
   }
 
+  public boolean isSharedConsent() {
+    return sharedConsent;
+  }
+
   /**
    * Gets any constraint violations that this key might incorporate.
    *
@@ -193,13 +200,14 @@ public class DiagnosisKey {
         && rollingPeriod == that.rollingPeriod
         && transmissionRiskLevel == that.transmissionRiskLevel
         && submissionTimestamp == that.submissionTimestamp
+        && sharedConsent == that.sharedConsent
         && Arrays.equals(keyData, that.keyData);
   }
 
   @Override
   public int hashCode() {
     int result = Objects
-        .hash(rollingStartIntervalNumber, rollingPeriod, transmissionRiskLevel, submissionTimestamp);
+        .hash(rollingStartIntervalNumber, rollingPeriod, transmissionRiskLevel, submissionTimestamp, sharedConsent);
     result = 31 * result + Arrays.hashCode(keyData);
     return result;
   }

@@ -20,31 +20,17 @@
 
 package app.coronawarn.server.services.submission.controller;
 
-public class SubmissionHeaders {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  private final String tan;
-  private final boolean traveler;
-  private final boolean sharedConsent;
+import org.junit.jupiter.api.Test;
 
-  private SubmissionHeaders(String tan, boolean traveler, boolean sharedConsent) {
-    this.tan = tan;
-    this.traveler = traveler;
-    this.sharedConsent = sharedConsent;
-  }
+class SubmissionHeadersTest {
 
-  public static SubmissionHeaders of(String tan, boolean traveler, boolean sharedConsent) {
-    return new SubmissionHeaders(tan, traveler, sharedConsent);
-  }
-
-  public String getTan() {
-    return tan;
-  }
-
-  public boolean isTraveler() {
-    return traveler;
-  }
-
-  public boolean isSharedConsent() {
-    return sharedConsent;
+  @Test
+  void checkInstanceCreation() {
+    SubmissionHeaders h = SubmissionHeaders.of("tan", true, true);
+    assertThat(h.getTan()).isEqualTo("tan");
+    assertThat(h.isSharedConsent()).isTrue();
+    assertThat(h.isTraveler()).isTrue();
   }
 }

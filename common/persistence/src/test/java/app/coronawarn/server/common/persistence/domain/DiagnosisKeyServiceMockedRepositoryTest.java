@@ -45,6 +45,7 @@ class DiagnosisKeyServiceMockedRepositoryTest {
   static final int expTransmissionRiskLevel = 1;
   static final String originCountry = "DE";
   static final List<String> visitedCountries = Collections.singletonList("DE");
+  static final boolean sharedConsent = false;
 
   @Autowired
   private DiagnosisKeyService diagnosisKeyService;
@@ -89,13 +90,13 @@ class DiagnosisKeyServiceMockedRepositoryTest {
   private DiagnosisKey validKey(long expSubmissionTimestamp) {
     return new DiagnosisKey(expKeyData, expRollingStartIntervalNumber,
         DiagnosisKey.EXPECTED_ROLLING_PERIOD, expTransmissionRiskLevel, expSubmissionTimestamp, originCountry,
-        visitedCountries);
+        visitedCountries, sharedConsent);
   }
 
   private DiagnosisKey invalidKey(long expSubmissionTimestamp) {
     byte[] expKeyData = "17--bytelongarray".getBytes(StandardCharsets.US_ASCII);
     return new DiagnosisKey(expKeyData, expRollingStartIntervalNumber,
         DiagnosisKey.EXPECTED_ROLLING_PERIOD, expTransmissionRiskLevel, expSubmissionTimestamp, originCountry,
-        visitedCountries);
+        visitedCountries, sharedConsent);
   }
 }

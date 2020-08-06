@@ -105,7 +105,7 @@ public class SubmissionController {
         submissionMonitor.incrementInvalidTanRequestCounter();
         deferredResult.setResult(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
       } else {
-        persistDiagnosisKeysPayload(exposureKeys);
+        persistDiagnosisKeysPayload(exposureKeys, submissionHeaders);
         deferredResult.setResult(ResponseEntity.ok().build());
       }
     } catch (Exception e) {
@@ -122,14 +122,19 @@ public class SubmissionController {
    * Persists the diagnosis keys contained in the specified request payload.
    *
    * @param protoBufDiagnosisKeys Diagnosis keys that were specified in the request.
+   * @param submissionHeaders     Object wrapper for the submission headers that were specified in the request headers.
    * @throws IllegalArgumentException in case the given collection contains {@literal null}.
    */
-  public void persistDiagnosisKeysPayload(SubmissionPayload protoBufDiagnosisKeys) {
+  public void persistDiagnosisKeysPayload(SubmissionPayload protoBufDiagnosisKeys,
+      SubmissionHeaders submissionHeaders) {
     List<TemporaryExposureKey> protoBufferKeysList = protoBufDiagnosisKeys.getKeysList();
     List<DiagnosisKey> diagnosisKeys = new ArrayList<>();
 
     for (TemporaryExposureKey protoBufferKey : protoBufferKeysList) {
-      DiagnosisKey diagnosisKey = DiagnosisKey.builder().fromProtoBuf(protoBufferKey).build();
+      DiagnosisKey diagnosisKey = DiagnosisKey.builder()
+          .fromProtoBuf(protoBufferKey)
+          .withSharedConsent(submissionHeaders.isSharedConsent())
+          .build();
       if (diagnosisKey.isYoungerThanRetentionThreshold(retentionDays)) {
         diagnosisKeys.add(diagnosisKey);
       } else {

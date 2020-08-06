@@ -52,6 +52,7 @@ public class DiagnosisKeyBuilder implements
   private Long submissionTimestamp = null;
   private String countryCode;
   private List<String> visitedCountries;
+  private boolean sharedConsent;
 
   DiagnosisKeyBuilder() {
   }
@@ -102,6 +103,12 @@ public class DiagnosisKeyBuilder implements
   }
 
   @Override
+  public FinalBuilder withSharedConsent(boolean sharedConsent) {
+    this.sharedConsent = sharedConsent;
+    return this;
+  }
+
+  @Override
   public FinalBuilder withRollingPeriod(int rollingPeriod) {
     this.rollingPeriod = rollingPeriod;
     return this;
@@ -116,7 +123,7 @@ public class DiagnosisKeyBuilder implements
 
     var diagnosisKey = new DiagnosisKey(
         keyData, rollingStartIntervalNumber, rollingPeriod, transmissionRiskLevel, submissionTimestamp, countryCode,
-        visitedCountries);
+        visitedCountries, sharedConsent);
     return throwIfValidationFails(diagnosisKey);
   }
 
