@@ -20,7 +20,6 @@
 
 package app.coronawarn.server.services.distribution.runner;
 
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -35,6 +34,7 @@ import org.springframework.boot.test.context.ConfigFileApplicationContextInitial
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import java.util.List;
 
 @EnableConfigurationProperties(value = DistributionServiceConfig.class)
 @ExtendWith(SpringExtension.class)
@@ -58,7 +58,7 @@ class RetentionPolicyRunnerTest {
     retentionPolicy.run(null);
 
     verify(diagnosisKeyService, times(1)).applyRetentionPolicy(distributionServiceConfig.getRetentionDays(),
-        distributionServiceConfig.getApi().getDistributionCountry());
+        List.of(distributionServiceConfig.getApi().getDistributionCountries()));
     verify(s3RetentionPolicy, times(1)).applyRetentionPolicy(distributionServiceConfig.getRetentionDays());
   }
 }

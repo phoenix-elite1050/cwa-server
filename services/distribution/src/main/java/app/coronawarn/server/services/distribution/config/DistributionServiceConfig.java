@@ -45,6 +45,7 @@ public class DistributionServiceConfig {
   private static final String ALGORITHM_OID_REGEX = "^[0-9]+[\\.[0-9]+]*$";
   private static final String BUNDLE_REGEX = "^[a-z-]+[\\.[a-z-]+]*$";
   private static final String PRIVATE_KEY_REGEX = "^(classpath:|file:[/]+)[a-zA-Z0-9_-]+[/[a-zA-Z0-9_-]+]*(.pem)?$";
+  private static final String DISTRIBUTION_COUNTRY_CODES_REGEX = "^([a-zA-Z]{2}(\\,*[a-zA-Z]{2})*)$";
 
   private Paths paths;
   private TestData testData;
@@ -264,7 +265,7 @@ public class DistributionServiceConfig {
     @Pattern(regexp = CHAR_AND_NUMBER_REGEX)
     private String countryPath;
     @Pattern(regexp = CHAR_AND_NUMBER_REGEX)
-    private String countryGermany;
+    private String countryOrigin;
     @Pattern(regexp = CHAR_AND_NUMBER_REGEX)
     private String datePath;
     @Pattern(regexp = CHAR_AND_NUMBER_REGEX)
@@ -275,7 +276,7 @@ public class DistributionServiceConfig {
     private String parametersPath;
     @Pattern(regexp = CHAR_AND_NUMBER_REGEX)
     private String appConfigFileName;
-    @Pattern(regexp = CHAR_AND_NUMBER_REGEX)
+    @Pattern(regexp = DISTRIBUTION_COUNTRY_CODES_REGEX)
     private String distributionCountry;
 
     public String getVersionPath() {
@@ -302,12 +303,12 @@ public class DistributionServiceConfig {
       this.countryPath = countryPath;
     }
 
-    public String getCountryGermany() {
-      return countryGermany;
+    public String getCountryOrigin() {
+      return countryOrigin;
     }
 
-    public void setCountryGermany(String countryGermany) {
-      this.countryGermany = countryGermany;
+    public void setCountryOrigin(String countryOrigin) {
+      this.countryOrigin = countryOrigin;
     }
 
     public String getDatePath() {
@@ -350,12 +351,16 @@ public class DistributionServiceConfig {
       this.appConfigFileName = appConfigFileName;
     }
 
-    public String getDistributionCountry() {
-      return distributionCountry;
+    public String[] getDistributionCountries() {
+      return distributionCountry.split(",");
     }
 
     public void setDistributionCountry(String distributionCountry) {
       this.distributionCountry = distributionCountry;
+    }
+
+    public String getDistributionCountriesDirectoryName() {
+      return distributionCountry.replace(",","");
     }
   }
 

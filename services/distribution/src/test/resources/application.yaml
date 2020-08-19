@@ -25,12 +25,13 @@ services:
       version-path: version
       version-v1: v1
       country-path: country
-      country-germany: DE
+      country-origin: ${COUNTRY_ORIGIN:DE}
       date-path: date
       hour-path: hour
       diagnosis-keys-path: diagnosis-keys
       parameters-path: configuration
       app-config-file-name: app_config
+      distribution-country: ${DISTRIBUTION_COUNTRY:DE}
     signature:
       app-bundle-id: de.rki.coronawarnapp
       verification-key-id: 262

@@ -120,11 +120,11 @@ public class DiagnosisKeyService {
    * days.
    *
    * @param daysToRetain the number of days until which diagnosis keys will be retained.
-   * @param countryCode  country filter.
+   * @param countryCodes  country filter.
    * @throws IllegalArgumentException if {@code daysToRetain} is negative.
    */
   @Transactional
-  public void applyRetentionPolicy(int daysToRetain, String countryCode) {
+  public void applyRetentionPolicy(int daysToRetain, List<String> countryCodes) {
     if (daysToRetain < 0) {
       throw new IllegalArgumentException("Number of days to retain must be greater or equal to 0.");
     }
@@ -133,9 +133,13 @@ public class DiagnosisKeyService {
         .ofInstant(Instant.now(), UTC)
         .minusDays(daysToRetain)
         .toEpochSecond(UTC) / SECONDS_PER_HOUR;
-    int numberOfDeletions = keyRepository.countOlderThanOrEqual(threshold, countryCode);
-    logger.info("[{}] Deleting {} diagnosis key(s) with a submission timestamp older than {} day(s) ago.",
-        countryCode, numberOfDeletions, daysToRetain);
-    keyRepository.deleteOlderThanOrEqual(threshold, countryCode);
+
+    countryCodes.forEach(countryCode -> {
+      int numberOfDeletions = keyRepository.countOlderThanOrEqual(threshold, countryCode);
+      logger.info("[{}] Deleting {} diagnosis key(s) with a submission timestamp older than {} day(s) ago.",
+          countryCode, numberOfDeletions, daysToRetain);
+      keyRepository.deleteOlderThanOrEqual(threshold, countryCode);
+    });
+
   }
 }
