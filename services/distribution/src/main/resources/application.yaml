@@ -49,6 +49,7 @@ services:
       parameters-path: configuration
       app-config-file-name: app_config
       distribution-country: ${DISTRIBUTION_COUNTRY:DE}
+      supported-countries: ${SUPPORTED_COUNTRIES:DE}
     # Signature configuration, used for signing the exports.
     signature:
       # The alias with which to identify public key to be used for verification.

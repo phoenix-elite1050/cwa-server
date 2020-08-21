@@ -142,6 +142,10 @@ public class DiagnosisKeyBuilder implements
       submissionTimestamp = Instant.now().getEpochSecond() / SECONDS_PER_HOUR;
     }
 
+    if (verificationType == null) {
+      verificationType = VerificationType.LAB_VERIFIED;
+    }
+
     var diagnosisKey = new DiagnosisKey(
         keyData, rollingStartIntervalNumber, rollingPeriod, transmissionRiskLevel, submissionTimestamp,
         consentToFederation, countryCode, visitedCountries, verificationType);

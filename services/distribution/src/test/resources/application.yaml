@@ -32,6 +32,7 @@ services:
       parameters-path: configuration
       app-config-file-name: app_config
       distribution-country: ${DISTRIBUTION_COUNTRY:DE}
+      supported-countries : ${SUPPORTED_COUNTRIES:DE}
     signature:
       app-bundle-id: de.rki.coronawarnapp
       verification-key-id: 262
