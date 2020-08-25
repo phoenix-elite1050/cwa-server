@@ -278,8 +278,6 @@ public class DistributionServiceConfig {
     private String appConfigFileName;
     @Pattern(regexp = DISTRIBUTION_COUNTRY_CODES_REGEX)
     private String distributionCountry;
-    @Pattern(regexp = DISTRIBUTION_COUNTRY_CODES_REGEX)
-    private String supportedCountries;
 
     public String getVersionPath() {
       return versionPath;
@@ -363,14 +361,6 @@ public class DistributionServiceConfig {
 
     public String getDistributionCountriesDirectoryName() {
       return distributionCountry.replace(",","");
-    }
-
-    public void setSupportedCountries(String supportedCountries) {
-      this.supportedCountries = supportedCountries;
-    }
-
-    public String[] getSupportedCountryArray() {
-      return supportedCountries.split(",");
     }
   }
 

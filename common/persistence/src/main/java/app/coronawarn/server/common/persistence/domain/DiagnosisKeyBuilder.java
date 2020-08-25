@@ -150,7 +150,7 @@ public class DiagnosisKeyBuilder implements
     }
 
     if (reportType == null) {
-      reportType = ReportType.CONFIRMED_CLINICAL_DIAGNOSIS;
+      reportType = ReportType.CONFIRMED_TEST;
     }
 
     var diagnosisKey = new DiagnosisKey(
