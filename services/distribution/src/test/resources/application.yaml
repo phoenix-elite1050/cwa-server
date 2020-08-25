@@ -31,7 +31,7 @@ services:
       diagnosis-keys-path: diagnosis-keys
       parameters-path: configuration
       app-config-file-name: app_config
-      distribution-country: ${DISTRIBUTION_COUNTRY:DE,FR}
+      distribution-country: ${DISTRIBUTION_COUNTRY:DE}
     signature:
       app-bundle-id: de.rki.coronawarnapp
       verification-key-id: 262
