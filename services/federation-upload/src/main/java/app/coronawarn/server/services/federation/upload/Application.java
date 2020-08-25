@@ -20,16 +20,21 @@
 
 package app.coronawarn.server.services.federation.upload;
 
+import app.coronawarn.server.common.federation.client.FederationFeignClientProvider;
+import app.coronawarn.server.common.federation.client.FederationServerClient;
 import app.coronawarn.server.services.federation.upload.config.UploadServiceConfig;
 import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
@@ -40,8 +45,9 @@ import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 @SpringBootApplication
 @EnableJdbcRepositories(basePackages = "app.coronawarn.server.common.persistence")
 @EntityScan(basePackages = "app.coronawarn.server.common.persistence")
-@ComponentScan({"app.coronawarn.server.common.persistence", "app.coronawarn.server.services.federation.upload"})
+@ComponentScan({"app.coronawarn.server.common.persistence", "app.coronawarn.server.services.federation.upload", "app.coronawarn.server.common.federation"})
 @EnableConfigurationProperties({UploadServiceConfig.class})
+@EnableFeignClients(basePackages = "app.coronawarn.server.common.federation")
 public class Application implements EnvironmentAware, DisposableBean {
 
   private static final Logger logger = LoggerFactory.getLogger(Application.class);

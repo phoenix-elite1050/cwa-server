@@ -1,8 +1,8 @@
-package app.coronawarn.server.services.federation.upload;
+package app.coronawarn.server.services.federation.upload.payload;
 
 import app.coronawarn.server.common.persistence.domain.DiagnosisKey;
 import app.coronawarn.server.common.protocols.external.exposurenotification.ReportType;
-import app.coronawarn.server.services.federation.upload.DiagnosisKeyBatchAssembler;
+import app.coronawarn.server.services.federation.upload.payload.DiagnosisKeyBatchAssembler;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

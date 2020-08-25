@@ -1,7 +1,11 @@
 package app.coronawarn.server.services.federation.upload.config;
 
+import app.coronawarn.server.common.federation.client.FederationFeignClientProvider;
+import app.coronawarn.server.common.federation.client.FederationServerClient;
 import app.coronawarn.server.common.protocols.external.exposurenotification.SignatureInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import javax.validation.constraints.Pattern;
 
