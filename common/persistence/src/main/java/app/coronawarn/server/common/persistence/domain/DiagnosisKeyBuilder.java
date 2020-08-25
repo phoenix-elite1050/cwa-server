@@ -149,8 +149,8 @@ public class DiagnosisKeyBuilder implements
       submissionTimestamp = Instant.now().getEpochSecond() / SECONDS_PER_HOUR;
     }
 
-    if (verificationType == null) {
-      verificationType = VerificationType.LAB_VERIFIED;
+    if (reportType == null) {
+      reportType = ReportType.CONFIRMED_CLINICAL_DIAGNOSIS;
     }
 
     var diagnosisKey = new DiagnosisKey(

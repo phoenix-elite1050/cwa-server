@@ -48,8 +48,8 @@ services:
       diagnosis-keys-path: diagnosis-keys
       parameters-path: configuration
       app-config-file-name: app_config
-      distribution-country: ${DISTRIBUTION_COUNTRY:DE}
-      supported-countries: ${SUPPORTED_COUNTRIES:DE}
+      distribution-country: ${DISTRIBUTION_COUNTRY:DE,FR}
+      supported-countries: ${SUPPORTED_COUNTRIES:DE,FR}
     # Signature configuration, used for signing the exports.
     signature:
       # The alias with which to identify public key to be used for verification.

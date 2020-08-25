@@ -97,6 +97,7 @@ class DiagnosisKeysDirectoryTest {
     DiagnosisKeyBundler bundler = new ProdDiagnosisKeyBundler(distributionServiceConfig);
     Directory<WritableOnDisk> directory = new DiagnosisKeysDirectory(bundler, cryptoProvider,
         distributionServiceConfig);
+    String distributionCountryName = distributionServiceConfig.getApi().getDistributionCountriesDirectoryName();
     parentDirectory.addWritable(directory);
     directory.prepare(new ImmutableStack<>());
     directory.write();
@@ -104,7 +105,7 @@ class DiagnosisKeysDirectoryTest {
     String s = File.separator;
     Set<String> expectedFiles = Set.of(
         join(s, "diagnosis-keys", "country", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "index")
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "index")
     );
 
     Set<String> actualFiles = getFilePaths(outputFile, outputFile.getAbsolutePath());
@@ -118,6 +119,8 @@ class DiagnosisKeysDirectoryTest {
     bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
     Directory<WritableOnDisk> directory = new DiagnosisKeysDirectory(bundler, cryptoProvider,
         distributionServiceConfig);
+    String distributionCountryName = distributionServiceConfig.getApi().getDistributionCountriesDirectoryName();
+
     parentDirectory.addWritable(directory);
     directory.prepare(new ImmutableStack<>());
     directory.write();
@@ -125,60 +128,60 @@ class DiagnosisKeysDirectoryTest {
     String s = File.separator;
     Set<String> expectedFiles = Set.of(
         join(s, "diagnosis-keys", "country", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "0", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "1", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "2", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "3", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "4", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "5", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "6", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "7", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "8", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "9", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "10", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "11", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "12", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "13", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "14", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "15", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "16", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "17", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "18", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "19", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "0", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "1", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "2", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "3", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "4", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "5", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "6", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "7", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "8", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "9", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "10", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "11", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "12", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "13", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "14", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "15", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "16", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "17", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "18", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "19", "index"),
         // One missing from data, but still we should a structure created because of the empty file (issue #650)
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "20", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "21", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "22", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-03", "hour", "23", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "0", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "1", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "2", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "3", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "4", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "5", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "6", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "7", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "8", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "9", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "10", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "11", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "12", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "13", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "14", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "15", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "16", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "17", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "18", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "19", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "20", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "21", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "22", "index"),
-        join(s, "diagnosis-keys", "country", "DE", "date", "1970-01-04", "hour", "23", "index")
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "20", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "21", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "22", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-03", "hour", "23", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "0", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "1", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "2", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "3", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "4", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "5", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "6", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "7", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "8", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "9", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "10", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "11", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "12", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "13", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "14", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "15", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "16", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "17", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "18", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "19", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "20", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "21", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "22", "index"),
+        join(s, "diagnosis-keys", "country", distributionCountryName, "date", "1970-01-04", "hour", "23", "index")
     );
 
     Set<String> actualFiles = getFilePaths(outputFile, outputFile.getAbsolutePath());
