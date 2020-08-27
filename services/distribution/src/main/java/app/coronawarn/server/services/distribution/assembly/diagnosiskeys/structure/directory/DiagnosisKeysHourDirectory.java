@@ -68,6 +68,8 @@ public class DiagnosisKeysHourDirectory extends IndexDirectoryOnDisk<LocalDateTi
       // The LocalDateTime currentHour already contains both the date and the hour information, so
       // we can throw away the LocalDate that's the second item on the stack from the "/date"
       // IndexDirectory.
+
+      //todo: pass tp diagnosis key bundler
       String region = (String) currentIndices.pop().pop().peek();
 
       List<DiagnosisKey> diagnosisKeysForCurrentHour =

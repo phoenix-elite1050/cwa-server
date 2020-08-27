@@ -62,7 +62,7 @@ public class S3RetentionPolicy {
         + api.getVersionV1() + "/"
         + api.getDiagnosisKeysPath() + "/"
         + api.getCountryPath() + "/"
-        + api.getDistributionCountriesDirectoryName() + "/"
+        + api.getCountryOrigin() + "/"
         + api.getDatePath() + "/");
     final String regex = ".*([0-9]{4}-[0-9]{2}-[0-9]{2}).*";
     final Pattern pattern = Pattern.compile(regex);

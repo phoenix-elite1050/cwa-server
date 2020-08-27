@@ -81,7 +81,7 @@ class TestDataGenerationTest {
     testData.setSeed(0);
     distributionServiceConfig.setRetentionDays(1);
     distributionServiceConfig.setTestData(testData);
-    distributionServiceConfig.getApi().setDistributionCountry(GERMANY);
+    distributionServiceConfig.setSupportedCountries(GERMANY);
     testDataGeneration = new TestDataGeneration(diagnosisKeyService, distributionServiceConfig);
   }
 
@@ -130,7 +130,7 @@ class TestDataGenerationTest {
 
   @Test
   void shouldGenerateValuesForGivenCountry() {
-    distributionServiceConfig.getApi().setDistributionCountry(FRANCE);
+    distributionServiceConfig.setSupportedCountries(FRANCE);
     testDataGeneration = new TestDataGeneration(diagnosisKeyService, distributionServiceConfig);
     var now = LocalDateTime.of(2020, 7, 15, 12, 0, 0).toInstant(ZoneOffset.UTC);
     TimeUtils.setNow(now);
@@ -145,7 +145,7 @@ class TestDataGenerationTest {
 
   @Test
   void shouldNotGenerateAnyKeysForGivenCountry() {
-    distributionServiceConfig.getApi().setDistributionCountry(FRANCE);
+    distributionServiceConfig.setSupportedCountries(FRANCE);
     testDataGeneration = new TestDataGeneration(diagnosisKeyService, distributionServiceConfig);
     var now = LocalDateTime.of(2020, 7, 15, 12, 0, 0).toInstant(ZoneOffset.UTC);
     TimeUtils.setNow(now);
@@ -160,7 +160,7 @@ class TestDataGenerationTest {
 
   @Test
   void shouldFilterVisitedCountryByGivenCountry() {
-    distributionServiceConfig.getApi().setDistributionCountry(FRANCE);
+    distributionServiceConfig.setSupportedCountries(FRANCE);
     testDataGeneration = new TestDataGeneration(diagnosisKeyService, distributionServiceConfig);
     var now = LocalDateTime.of(2020, 7, 15, 12, 0, 0).toInstant(ZoneOffset.UTC);
     TimeUtils.setNow(now);

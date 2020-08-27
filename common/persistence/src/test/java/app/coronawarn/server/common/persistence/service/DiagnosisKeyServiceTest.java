@@ -98,7 +98,7 @@ class DiagnosisKeyServiceTest {
   @ValueSource(ints = {0, 1, Integer.MAX_VALUE})
   @ParameterizedTest
   void testApplyRetentionPolicyForValidNumberOfDays(int daysToRetain) {
-    assertThatCode(() -> diagnosisKeyService.applyRetentionPolicy(daysToRetain, List.of("DE")))
+    assertThatCode(() -> diagnosisKeyService.applyRetentionPolicy(daysToRetain, "DE"))
         .doesNotThrowAnyException();
   }
 
@@ -106,13 +106,13 @@ class DiagnosisKeyServiceTest {
   @ValueSource(ints = {Integer.MIN_VALUE, -1})
   @ParameterizedTest
   void testApplyRetentionPolicyForNegativeNumberOfDays(int daysToRetain) {
-    assertThat(catchThrowable(() -> diagnosisKeyService.applyRetentionPolicy(daysToRetain, List.of("DE"))))
+    assertThat(catchThrowable(() -> diagnosisKeyService.applyRetentionPolicy(daysToRetain, "DE")))
         .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
   void testApplyRetentionPolicyForEmptyDb() {
-    diagnosisKeyService.applyRetentionPolicy(1, List.of("DE"));
+    diagnosisKeyService.applyRetentionPolicy(1, "DE");
     var actKeys = diagnosisKeyService.getDiagnosisKeys();
     assertDiagnosisKeysEqual(Lists.emptyList(), actKeys);
   }
@@ -122,7 +122,7 @@ class DiagnosisKeyServiceTest {
     var expKeys = List.of(buildDiagnosisKeyForDateTime(OffsetDateTime.now(UTC).minusDays(1L)));
 
     diagnosisKeyService.saveDiagnosisKeys(expKeys);
-    diagnosisKeyService.applyRetentionPolicy(1, List.of("DE"));
+    diagnosisKeyService.applyRetentionPolicy(1, "DE");
     var actKeys = diagnosisKeyService.getDiagnosisKeys();
 
     assertDiagnosisKeysEqual(expKeys, actKeys);
@@ -133,7 +133,7 @@ class DiagnosisKeyServiceTest {
     var keys = List.of(buildDiagnosisKeyForDateTime(OffsetDateTime.now(UTC).minusDays(1L).minusHours(1)));
 
     diagnosisKeyService.saveDiagnosisKeys(keys);
-    diagnosisKeyService.applyRetentionPolicy(1, List.of("DE"));
+    diagnosisKeyService.applyRetentionPolicy(1, "DE");
     var actKeys = diagnosisKeyService.getDiagnosisKeys();
 
     assertDiagnosisKeysEqual(Lists.emptyList(), actKeys);
@@ -146,7 +146,7 @@ class DiagnosisKeyServiceTest {
             ReportType.CONFIRMED_CLINICAL_DIAGNOSIS));
 
     diagnosisKeyService.saveDiagnosisKeys(expKeys);
-    diagnosisKeyService.applyRetentionPolicy(1, List.of("FR"));
+    diagnosisKeyService.applyRetentionPolicy(1, "FR");
     var actKeys = diagnosisKeyService.getDiagnosisKeys();
 
     assertDiagnosisKeysEqual(actKeys, expKeys);
@@ -158,7 +158,7 @@ class DiagnosisKeyServiceTest {
     var germanKeys = buildDiagnosisKeyForDateTime(OffsetDateTime.now(UTC).minusDays(2L), "DE", Collections.singletonList("DE"), ReportType.CONFIRMED_CLINICAL_DIAGNOSIS);
 
     diagnosisKeyService.saveDiagnosisKeys(List.of(germanKeys, frenchKeys));
-    diagnosisKeyService.applyRetentionPolicy(1, List.of("FR"));
+    diagnosisKeyService.applyRetentionPolicy(1, "FR");
     var actKeys = diagnosisKeyService.getDiagnosisKeys();
 
     assertDiagnosisKeysEqual(List.of(germanKeys), actKeys);
@@ -169,7 +169,7 @@ class DiagnosisKeyServiceTest {
     var keys = List.of(
         buildDiagnosisKeyForDateTime(OffsetDateTime.now(UTC).minusDays(1L).minusHours(1), "DE", List.of("DE", "FR", "LU"), ReportType.CONFIRMED_CLINICAL_DIAGNOSIS));
     diagnosisKeyService.saveDiagnosisKeys(keys);
-    diagnosisKeyService.applyRetentionPolicy(1, List.of("FR"));
+    diagnosisKeyService.applyRetentionPolicy(1, "FR");
     var actKeys = diagnosisKeyService.getDiagnosisKeys();
     assertTrue(actKeys.isEmpty());
   }
@@ -181,7 +181,7 @@ class DiagnosisKeyServiceTest {
         buildDiagnosisKeyForDateTime(OffsetDateTime.now(UTC).minusDays(1L).minusHours(1L), "FR", List.of("FR"),ReportType.CONFIRMED_CLINICAL_DIAGNOSIS),
         buildDiagnosisKeyForDateTime(OffsetDateTime.now(UTC).minusDays(1L).minusHours(1L), "LU", List.of("FR"), ReportType.CONFIRMED_CLINICAL_DIAGNOSIS));
     diagnosisKeyService.saveDiagnosisKeys(keys);
-    diagnosisKeyService.applyRetentionPolicy(1, List.of("FR"));
+    diagnosisKeyService.applyRetentionPolicy(1, "FR");
     var actKeys = diagnosisKeyService.getDiagnosisKeys();
     assertTrue(actKeys.isEmpty());
   }

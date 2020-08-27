@@ -46,10 +46,12 @@ public class DiagnosisKeysCountryDirectory extends IndexDirectoryOnDisk<String> 
    * @param diagnosisKeyBundler A {@link DiagnosisKeyBundler} containing the {@link DiagnosisKey DiagnosisKeys}.
    * @param cryptoProvider      The {@link CryptoProvider} used for payload signing.
    */
+
+  //todo: change set to imply all the supported countries
   public DiagnosisKeysCountryDirectory(DiagnosisKeyBundler diagnosisKeyBundler,
       CryptoProvider cryptoProvider, DistributionServiceConfig distributionServiceConfig) {
     super(distributionServiceConfig.getApi().getCountryPath(), ignoredValue ->
-        Set.of(distributionServiceConfig.getApi().getDistributionCountriesDirectoryName()), Object::toString);
+        Set.of(distributionServiceConfig.getSupportedCountries()), Object::toString);
     this.diagnosisKeyBundler = diagnosisKeyBundler;
     this.cryptoProvider = cryptoProvider;
     this.distributionServiceConfig = distributionServiceConfig;

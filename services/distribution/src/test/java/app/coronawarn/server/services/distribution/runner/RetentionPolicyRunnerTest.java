@@ -58,7 +58,7 @@ class RetentionPolicyRunnerTest {
     retentionPolicy.run(null);
 
     verify(diagnosisKeyService, times(1)).applyRetentionPolicy(distributionServiceConfig.getRetentionDays(),
-        List.of(distributionServiceConfig.getApi().getDistributionCountries()));
+        distributionServiceConfig.getApi().getCountryOrigin());
     verify(s3RetentionPolicy, times(1)).applyRetentionPolicy(distributionServiceConfig.getRetentionDays());
   }
 }

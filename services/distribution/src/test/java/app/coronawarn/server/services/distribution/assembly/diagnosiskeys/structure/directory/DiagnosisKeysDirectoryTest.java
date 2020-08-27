@@ -97,7 +97,7 @@ class DiagnosisKeysDirectoryTest {
     DiagnosisKeyBundler bundler = new ProdDiagnosisKeyBundler(distributionServiceConfig);
     Directory<WritableOnDisk> directory = new DiagnosisKeysDirectory(bundler, cryptoProvider,
         distributionServiceConfig);
-    String distributionCountryName = distributionServiceConfig.getApi().getDistributionCountriesDirectoryName();
+    String distributionCountryName = distributionServiceConfig.getApi().getCountryOrigin();
     parentDirectory.addWritable(directory);
     directory.prepare(new ImmutableStack<>());
     directory.write();
@@ -119,7 +119,7 @@ class DiagnosisKeysDirectoryTest {
     bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
     Directory<WritableOnDisk> directory = new DiagnosisKeysDirectory(bundler, cryptoProvider,
         distributionServiceConfig);
-    String distributionCountryName = distributionServiceConfig.getApi().getDistributionCountriesDirectoryName();
+    String distributionCountryName = distributionServiceConfig.getApi().getCountryOrigin();
 
     parentDirectory.addWritable(directory);
     directory.prepare(new ImmutableStack<>());

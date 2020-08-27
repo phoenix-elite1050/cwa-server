@@ -48,6 +48,10 @@ public interface DiagnosisKeyRepository extends PagingAndSortingRepository<Diagn
    * @param countryCode filter country code.
    * @return list of DiagnosisKeys.
    */
+
+  //todo: SELECT * FROM diagnosis_key WHERE :country_code = ANY(visited_countries) ORDER BY submission_timestamp ASC
+  //Map<String,Iterable<DiagnosisKey>> findAllKeysWhereVisitedCountryContains(@Param("list_supported_country")
+  // String supportedCountries);
   @Query("SELECT * FROM diagnosis_key WHERE :country_code = ANY(visited_countries) ORDER BY submission_timestamp ASC")
   Iterable<DiagnosisKey> findAllKeysWhereVisitedCountryContains(@Param("country_code") String countryCode);
 

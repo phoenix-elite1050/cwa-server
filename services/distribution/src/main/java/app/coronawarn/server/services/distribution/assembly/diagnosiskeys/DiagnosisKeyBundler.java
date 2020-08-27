@@ -90,6 +90,8 @@ public abstract class DiagnosisKeyBundler {
    * @param diagnosisKeys    The {@link DiagnosisKey DiagnosisKeys} contained by this {@link DiagnosisKeyBundler}.
    * @param distributionTime The {@link LocalDateTime} at which the distribution runs.
    */
+
+  //todo: map of string collection of diagnosis keys
   public void setDiagnosisKeys(Collection<DiagnosisKey> diagnosisKeys, LocalDateTime distributionTime) {
     this.distributionTime = distributionTime;
     this.createDiagnosisKeyDistributionMap(diagnosisKeys);

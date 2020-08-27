@@ -68,7 +68,7 @@ public class TestDataGeneration implements ApplicationRunner {
 
   private final DiagnosisKeyService diagnosisKeyService;
 
-  private final List<String> distributionCountries;
+  private final List<String> supportedCountries;
 
   private final String logPrefix;
 
@@ -85,8 +85,8 @@ public class TestDataGeneration implements ApplicationRunner {
     this.diagnosisKeyService = diagnosisKeyService;
     this.retentionDays = distributionServiceConfig.getRetentionDays();
     this.config = distributionServiceConfig.getTestData();
-    this.distributionCountries = List.of(distributionServiceConfig.getApi().getDistributionCountries());
-    this.logPrefix = "[" + this.distributionCountries + "]";
+    this.supportedCountries = List.of(distributionServiceConfig.getSupportedCountries());
+    this.logPrefix = "[" + this.supportedCountries + "]";
   }
 
   /**
@@ -103,7 +103,7 @@ public class TestDataGeneration implements ApplicationRunner {
   private void writeTestData() {
     logger.debug("{} Querying diagnosis keys from the database...", this.logPrefix);
     List<DiagnosisKey> existingDiagnosisKeys = new ArrayList<>();
-    distributionCountries.forEach(distributionCountry -> {
+    supportedCountries.forEach(distributionCountry -> {
       existingDiagnosisKeys.addAll(diagnosisKeyService.getDiagnosisKeysByVisitedCountry(distributionCountry));
     });
 
@@ -121,7 +121,7 @@ public class TestDataGeneration implements ApplicationRunner {
       logger.debug("{} Skipping test data generation, latest diagnosis keys are still up-to-date.", this.logPrefix);
       return;
     }
-    distributionCountries.forEach(distributionCountry -> {
+    supportedCountries.forEach(distributionCountry -> {
       logger.debug("{} Generating diagnosis keys between {} and {}...", this.logPrefix, startTimestamp, endTimestamp);
       List<DiagnosisKey> newDiagnosisKeys = LongStream.rangeClosed(startTimestamp, endTimestamp)
           .mapToObj(submissionTimestamp -> IntStream.range(0, poisson.sample())
