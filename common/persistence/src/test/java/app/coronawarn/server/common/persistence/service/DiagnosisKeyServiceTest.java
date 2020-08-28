@@ -267,17 +267,17 @@ class DiagnosisKeyServiceTest {
 
     @Test
     void testShouldGetThreeEntriesDE() {
-      assertEquals(3, diagnosisKeyService.getDiagnosisKeys(List.of("DE")).size());
+      assertEquals(3, diagnosisKeyService.getDiagnosisKeys(List.of("DE")).get("DE").size());
     }
 
     @Test
     void testShouldGetTwoEntriesFR() {
-      assertEquals(2, diagnosisKeyService.getDiagnosisKeys(List.of("FR")).size());
+      assertEquals(2, diagnosisKeyService.getDiagnosisKeys(List.of("FR")).get("FR").size());
     }
 
     @Test
     void testShouldGetOneEntryDK() {
-      assertEquals(1, diagnosisKeyService.getDiagnosisKeys(List.of("DK")).size());
+      assertEquals(1, diagnosisKeyService.getDiagnosisKeys(List.of("DK")).get("DK").size());
     }
   }
 

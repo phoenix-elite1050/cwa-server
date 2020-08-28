@@ -30,11 +30,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -64,7 +66,7 @@ class ProdDiagnosisKeyBundlerKeyRetrievalTest {
         .of(buildDiagnosisKeys(6, 50L, 5), buildDiagnosisKeys(6, 51L, 5), buildDiagnosisKeys(6, 52L, 5))
         .flatMap(List::stream)
         .collect(Collectors.toList());
-    Map<String, List<DiagnosisKey>> diagnosisKeysMap = null;
+    Map<String, List<DiagnosisKey>> diagnosisKeysMap = new HashMap<>();
     diagnosisKeysMap.put("DE", diagnosisKeys);
     bundler.setDiagnosisKeys(diagnosisKeysMap, LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getAllDiagnosisKeys()).hasSize(15);

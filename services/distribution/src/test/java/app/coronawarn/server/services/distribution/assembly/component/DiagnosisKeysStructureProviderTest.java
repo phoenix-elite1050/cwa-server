@@ -30,7 +30,9 @@ import app.coronawarn.server.services.distribution.assembly.structure.WritableOn
 import app.coronawarn.server.services.distribution.assembly.structure.directory.Directory;
 import app.coronawarn.server.services.distribution.config.DistributionServiceConfig;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.Assertions;
@@ -59,15 +61,17 @@ class DiagnosisKeysStructureProviderTest {
 
   @Mock
   DiagnosisKeyService diagnosisKeyService;
-  List<DiagnosisKey> diagnosisKeys;
+  Map<String, List<DiagnosisKey>> diagnosisKeys = new HashMap<>();
 
   @BeforeEach
   void setup() {
-    diagnosisKeys = IntStream.range(0, 30)
+    diagnosisKeys.put("DE",IntStream.range(0, 30)
         .mapToObj(currentHour -> buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3, 0, 0).plusHours(currentHour), 5))
         .flatMap(List::stream)
-        .collect(Collectors.toList());
-    Mockito.when(diagnosisKeyService.getDiagnosisKeys(List.of(distributionServiceConfig.getSupportedCountries())).get("DE")).thenReturn(diagnosisKeys);
+        .collect(Collectors.toList()));
+    Mockito.when(diagnosisKeyService
+        .getDiagnosisKeys(List.of(distributionServiceConfig.getSupportedCountries())))
+        .thenReturn(diagnosisKeys);
   }
 
   @Test

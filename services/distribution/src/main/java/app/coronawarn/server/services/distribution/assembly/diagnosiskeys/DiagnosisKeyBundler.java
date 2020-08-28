@@ -87,16 +87,15 @@ public abstract class DiagnosisKeyBundler {
    * Sets the {@link DiagnosisKey DiagnosisKeys} contained by this {@link DiagnosisKeyBundler} and the time at which the
    * distribution runs and calls {@link DiagnosisKeyBundler#createDiagnosisKeyDistributionMap}.
    *
-   * @param countryDiagnosisKeys    The {@link DiagnosisKey DiagnosisKeys} contained by this {@link DiagnosisKeyBundler}.
-   * @param distributionTime The {@link LocalDateTime} at which the distribution runs.
+   * @param countryDiagnosisKeys The {@link DiagnosisKey DiagnosisKeys} contained by this {@link DiagnosisKeyBundler}.
+   * @param distributionTime     The {@link LocalDateTime} at which the distribution runs.
    */
 
   public void setDiagnosisKeys(Map<String, List<DiagnosisKey>> countryDiagnosisKeys, LocalDateTime distributionTime) {
-    this.distributionTime = distributionTime;
-    countryDiagnosisKeys.forEach((country, diagnosisKeys) -> {
-      this.createDiagnosisKeyDistributionMap(diagnosisKeys);
-    });
-
+    if (!countryDiagnosisKeys.isEmpty()) {
+      this.distributionTime = distributionTime;
+      countryDiagnosisKeys.forEach((country, diagnosisKeys) -> this.createDiagnosisKeyDistributionMap(diagnosisKeys));
+    }
   }
 
   /**

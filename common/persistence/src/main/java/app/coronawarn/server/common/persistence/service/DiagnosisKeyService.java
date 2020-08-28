@@ -29,8 +29,11 @@ import app.coronawarn.server.common.persistence.repository.DiagnosisKeyRepositor
 import io.micrometer.core.annotation.Timed;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -81,8 +84,8 @@ public class DiagnosisKeyService {
   }
 
   /**
-   * Return all valid persisted diagnosis keys, sorted by their submission timestamp
-   * and mapped to supportedCountries contains
+   *  Return all valid persisted diagnosis keys, sorted by their submission timestamp
+   * and mapped to supportedCountriesDiagnosisKeyBundler.java.
    *
    * @param supportedCountries country filter.
    * @return Collection of {@link DiagnosisKey} that have visited_country in their array.
@@ -96,9 +99,11 @@ public class DiagnosisKeyService {
   private Map<String, List<DiagnosisKey>> filterAndGroupDiagnosisKeysByCountry(List<DiagnosisKey> diagnosisKeys,
       List<String> supportedCountries) {
 
-    Map<String, List<DiagnosisKey>> validDiagnosisKeys = supportedCountries.stream()
-        .collect(Collectors.toMap(supportedCountry -> supportedCountry, supportedCountry -> Collections.emptyList()));
+    Map<String, List<DiagnosisKey>> validDiagnosisKeys = new HashMap<>();
 
+    supportedCountries.forEach(supportedCountry -> {
+      validDiagnosisKeys.put(supportedCountry, new ArrayList<>());
+    });
 
     diagnosisKeys.stream()
         .filter(DiagnosisKeyService::isDiagnosisKeyValid)

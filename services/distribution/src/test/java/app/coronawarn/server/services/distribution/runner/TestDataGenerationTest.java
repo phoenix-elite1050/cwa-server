@@ -136,13 +136,14 @@ class TestDataGenerationTest {
     var now = LocalDateTime.of(2020, 7, 15, 12, 0, 0).toInstant(ZoneOffset.UTC);
     TimeUtils.setNow(now);
 
-    when(diagnosisKeyService.getDiagnosisKeys(FRANCE)).thenReturn(Collections.emptyMap());
+    when(diagnosisKeyService.getDiagnosisKeys()).thenReturn(Collections.emptyList());
 
     testDataGeneration.run(null);
     verify(diagnosisKeyService, atMostOnce()).saveDiagnosisKeys(captor.capture());
     Assert.assertTrue(captor.getValue().stream()
         .allMatch(k -> k.getVisitedCountries().contains(FRANCE)));
   }
+
 
   @Test
   void shouldNotGenerateAnyKeysForGivenCountry() {
