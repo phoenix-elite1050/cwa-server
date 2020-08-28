@@ -30,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import app.coronawarn.server.common.protocols.external.exposurenotification.ReportType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,12 +49,14 @@ class DiagnosisKeyServiceMockedRepositoryTest {
   static final List<String> visitedCountries = Collections.singletonList("DE");
   static final ReportType reportType = ReportType.CONFIRMED_CLINICAL_DIAGNOSIS;
   static final int daysSinceOnsetOfSymptoms = 1;
+  static final List<String> supportedCountries = List.of("DE","FR","DK");
 
   @Autowired
   private DiagnosisKeyService diagnosisKeyService;
 
   @MockBean
   private DiagnosisKeyRepository diagnosisKeyRepository;
+
 
   @Test
   void testKeyRetrievalWithInvalidDbEntries() {
@@ -63,8 +66,8 @@ class DiagnosisKeyServiceMockedRepositoryTest {
 
     mockInvalidKeyInDb(expKeys);
 
-    List<DiagnosisKey> actualKeys = diagnosisKeyService.getDiagnosisKeys();
-    assertThat(actualKeys.isEmpty()).isTrue();
+    Map<String, List<DiagnosisKey>> actualKeys = diagnosisKeyService.getDiagnosisKeys(supportedCountries);
+    assertThat(actualKeys.get("DE").isEmpty()).isTrue();
   }
 
   @Test
@@ -79,10 +82,10 @@ class DiagnosisKeyServiceMockedRepositoryTest {
 
     mockInvalidKeyInDb(expKeys);
 
-    List<DiagnosisKey> actualKeys = diagnosisKeyService.getDiagnosisKeys();
+    Map<String, List<DiagnosisKey>> actualKeys = diagnosisKeyService.getDiagnosisKeys(supportedCountries);
     expKeys.remove(invalidKey1);
     expKeys.remove(invalidKey2);
-    assertDiagnosisKeysEqual(expKeys, actualKeys);
+    assertDiagnosisKeysEqual(expKeys, actualKeys.get("DE"));
   }
 
   private void mockInvalidKeyInDb(List<DiagnosisKey> keys) {

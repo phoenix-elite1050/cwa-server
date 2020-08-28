@@ -41,6 +41,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -79,10 +80,10 @@ class DiagnosisKeysHourDirectoryTest {
     outputFile = outputFolder.newFolder();
   }
 
-  private void runHourDistribution(Collection<DiagnosisKey> diagnosisKeys, LocalDateTime distributionTime,
+  private void runHourDistribution(List<DiagnosisKey> diagnosisKeys, LocalDateTime distributionTime,
       LocalDate keysSubmissionDate) {
     DiagnosisKeyBundler bundler = new ProdDiagnosisKeyBundler(distributionServiceConfig);
-    bundler.setDiagnosisKeys(diagnosisKeys, distributionTime);
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), distributionTime);
     DiagnosisKeysHourDirectory hourDirectory = new DiagnosisKeysHourDirectory(bundler, cryptoProvider,
         distributionServiceConfig);
     Directory<WritableOnDisk> outputDirectory = new DirectoryOnDisk(outputFile);
@@ -97,7 +98,7 @@ class DiagnosisKeysHourDirectoryTest {
 
   @Test
   void testCreatesCorrectStructureForMultipleHours() {
-    Collection<DiagnosisKey> diagnosisKeys = IntStream.range(0, 5)
+    List<DiagnosisKey> diagnosisKeys = IntStream.range(0, 5)
         .mapToObj(currentHour -> buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3, 0, 0).plusHours(currentHour), 5))
         .flatMap(List::stream)
         .collect(Collectors.toList());
@@ -110,7 +111,7 @@ class DiagnosisKeysHourDirectoryTest {
 
   @Test
   void testDoesNotIncludeCurrentHour() {
-    Collection<DiagnosisKey> diagnosisKeys = IntStream.range(0, 5)
+    List<DiagnosisKey> diagnosisKeys = IntStream.range(0, 5)
         .mapToObj(currentHour -> buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3, 0, 0).plusHours(currentHour), 5))
         .flatMap(List::stream)
         .collect(Collectors.toList());
@@ -122,7 +123,7 @@ class DiagnosisKeysHourDirectoryTest {
 
   @Test
   void testDoesNotIncludeHoursInTheFuture() {
-    Collection<DiagnosisKey> diagnosisKeys = List.of(
+    List<DiagnosisKey> diagnosisKeys = List.of(
         buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3, 0, 0), 5),
         buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3, 1, 0), 5),
         buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3, 2, 0), 5))
@@ -138,7 +139,7 @@ class DiagnosisKeysHourDirectoryTest {
   @Test
   void testDistributionTimeIsNowItDoesIncludeCurrentHour() {
     final LocalDateTime nowUtc = TimeUtils.getCurrentUtcHour();
-    Collection<DiagnosisKey> diagnosisKeys = List.of(
+    List<DiagnosisKey> diagnosisKeys = List.of(
         buildDiagnosisKeys(6, nowUtc.minusHours(3), 5),
         buildDiagnosisKeys(6, nowUtc.minusHours(2), 5),
         buildDiagnosisKeys(6, nowUtc.minusHours(1), 5))

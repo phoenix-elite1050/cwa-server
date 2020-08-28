@@ -67,7 +67,7 @@ class DiagnosisKeysStructureProviderTest {
         .mapToObj(currentHour -> buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3, 0, 0).plusHours(currentHour), 5))
         .flatMap(List::stream)
         .collect(Collectors.toList());
-    Mockito.when(diagnosisKeyService.getDiagnosisKeys()).thenReturn(diagnosisKeys);
+    Mockito.when(diagnosisKeyService.getDiagnosisKeys(List.of(distributionServiceConfig.getSupportedCountries())).get("DE")).thenReturn(diagnosisKeys);
   }
 
   @Test

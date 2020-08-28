@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -116,7 +117,7 @@ class DiagnosisKeysDirectoryTest {
   @Test
   void checkBuildsTheCorrectDirectoryStructure() {
     DiagnosisKeyBundler bundler = new ProdDiagnosisKeyBundler(distributionServiceConfig);
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     Directory<WritableOnDisk> directory = new DiagnosisKeysDirectory(bundler, cryptoProvider,
         distributionServiceConfig);
     String distributionCountryName = distributionServiceConfig.getApi().getCountryOrigin();

@@ -32,7 +32,9 @@ import app.coronawarn.server.services.distribution.config.DistributionServiceCon
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -102,14 +104,12 @@ public class TestDataGeneration implements ApplicationRunner {
    */
   private void writeTestData() {
     logger.debug("{} Querying diagnosis keys from the database...", this.logPrefix);
-    List<DiagnosisKey> existingDiagnosisKeys = new ArrayList<>();
-    supportedCountries.forEach(distributionCountry -> {
-      existingDiagnosisKeys.addAll(diagnosisKeyService.getDiagnosisKeysByVisitedCountry(distributionCountry));
-    });
+    Map<String, List<DiagnosisKey> > existingDiagnosisKeys = new HashMap<>();
+      existingDiagnosisKeys.putAll(diagnosisKeyService.getDiagnosisKeys(supportedCountries));
 
     // Timestamps in hours since epoch. Test data generation starts one hour after the latest diagnosis key in the
     // database and ends one hour before the current one.
-    long startTimestamp = getGeneratorStartTimestamp(existingDiagnosisKeys); // Inclusive
+    long startTimestamp = getGeneratorStartTimestamp(existingDiagnosisKeys.get("DE")); // Inclusive
     long endTimestamp = getGeneratorEndTimestamp(); // Inclusive
 
     // Add the startTimestamp to the seed. Otherwise we would generate the same data every hour.

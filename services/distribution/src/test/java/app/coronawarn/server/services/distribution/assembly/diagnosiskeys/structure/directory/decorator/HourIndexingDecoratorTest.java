@@ -37,6 +37,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -84,7 +85,7 @@ class HourIndexingDecoratorTest {
     when(svcConfig.getMaximumNumberOfKeysPerBundle()).thenReturn(1);
 
     DiagnosisKeyBundler diagnosisKeyBundler = new ProdDiagnosisKeyBundler(svcConfig);
-    diagnosisKeyBundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 3, 5, 0));
+    diagnosisKeyBundler.setDiagnosisKeys(Map.of("DE",diagnosisKeys), LocalDateTime.of(1970, 1, 3, 5, 0));
 
     HourIndexingDecorator decorator = makeDecoratedHourDirectory(diagnosisKeyBundler);
 
@@ -100,7 +101,7 @@ class HourIndexingDecoratorTest {
 
     TimeUtils.setNow(LocalDateTime.of(1970, 1, 5, 1, 0).toInstant(ZoneOffset.UTC));
 
-    diagnosisKeyBundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 1, 0));
+    diagnosisKeyBundler.setDiagnosisKeys(Map.of("DE",diagnosisKeys), LocalDateTime.of(1970, 1, 5, 1, 0));
     HourIndexingDecorator decorator = makeDecoratedHourDirectory(diagnosisKeyBundler);
     decorator.prepare(new ImmutableStack<>().push("DE").push(LocalDate.of(1970, 1, 5)));
 

@@ -27,6 +27,7 @@ import app.coronawarn.server.common.persistence.domain.DiagnosisKey;
 import app.coronawarn.server.services.distribution.config.DistributionServiceConfig;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -52,14 +53,14 @@ class ProdDiagnosisKeyBundlerShiftingPolicyTest {
   @Test
   void testDoesNotShiftIfPackageSizeGreaterThanThreshold() {
     List<DiagnosisKey> diagnosisKeys = buildDiagnosisKeys(6, 50L, 6);
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 2, 0, 0))).hasSize(6);
   }
 
   @Test
   void testDoesNotShiftIfPackageSizeEqualsThreshold() {
     List<DiagnosisKey> diagnosisKeys = buildDiagnosisKeys(6, 50L, 5);
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 2, 0, 0))).hasSize(5);
   }
 
@@ -68,7 +69,7 @@ class ProdDiagnosisKeyBundlerShiftingPolicyTest {
     List<DiagnosisKey> diagnosisKeys = Stream
         .concat(buildDiagnosisKeys(6, 50L, 4).stream(), buildDiagnosisKeys(6, 51L, 1).stream())
         .collect(Collectors.toList());
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 2, 0, 0))).isEmpty();
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 3, 0, 0))).hasSize(5);
   }
@@ -79,7 +80,7 @@ class ProdDiagnosisKeyBundlerShiftingPolicyTest {
         .of(buildDiagnosisKeys(6, 50L, 5), buildDiagnosisKeys(6, 51L, 2), buildDiagnosisKeys(6, 52L, 4))
         .flatMap(List::stream)
         .collect(Collectors.toList());
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 2, 0, 0))).hasSize(5);
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 3, 0, 0))).isEmpty();
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 4, 0, 0))).hasSize(6);
@@ -91,7 +92,7 @@ class ProdDiagnosisKeyBundlerShiftingPolicyTest {
     List<DiagnosisKey> diagnosisKeys = Stream
         .concat(buildDiagnosisKeys(6, 50L, 1).stream(), buildDiagnosisKeys(6, 51L, 5).stream())
         .collect(Collectors.toList());
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 2, 0, 0))).isEmpty();
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 3, 0, 0))).hasSize(6);
   }
@@ -104,7 +105,7 @@ class ProdDiagnosisKeyBundlerShiftingPolicyTest {
             buildDiagnosisKeys(6, 56L, 1))
         .flatMap(List::stream)
         .collect(Collectors.toList());
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 2, 0, 0))).isEmpty();
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 3, 0, 0))).isEmpty();
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 3, 4, 0, 0))).isEmpty();

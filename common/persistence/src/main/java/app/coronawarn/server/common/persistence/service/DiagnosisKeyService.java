@@ -30,7 +30,9 @@ import io.micrometer.core.annotation.Timed;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import org.slf4j.Logger;
@@ -79,16 +81,36 @@ public class DiagnosisKeyService {
   }
 
   /**
-   * Return all valid persisted diagnosis keys, sorted by their submission timestamp where visited_countries contains
-   * {@param countryCode}.
+   * Return all valid persisted diagnosis keys, sorted by their submission timestamp
+   * and mapped to supportedCountries contains
    *
-   * @param countryCode country filter.
+   * @param supportedCountries country filter.
    * @return Collection of {@link DiagnosisKey} that have visited_country in their array.
    */
-  public List<DiagnosisKey> getDiagnosisKeysByVisitedCountry(String countryCode) {
-    var diagnosisKeys = createStreamFromIterator(
-        keyRepository.findAllKeysWhereVisitedCountryContains(countryCode).iterator()).collect(Collectors.toList());
-    return this.filterValidDiagnosisKeys(diagnosisKeys);
+  public Map<String, List<DiagnosisKey>> getDiagnosisKeys(List<String> supportedCountries) {
+    List<DiagnosisKey> diagnosisKeys = createStreamFromIterator(
+        keyRepository.findAll(Sort.by(Direction.ASC, "submissionTimestamp")).iterator()).collect(Collectors.toList());
+    return this.filterAndGroupDiagnosisKeysByCountry(diagnosisKeys, supportedCountries);
+  }
+
+  private Map<String, List<DiagnosisKey>> filterAndGroupDiagnosisKeysByCountry(List<DiagnosisKey> diagnosisKeys,
+      List<String> supportedCountries) {
+
+    Map<String, List<DiagnosisKey>> validDiagnosisKeys = supportedCountries.stream()
+        .collect(Collectors.toMap(supportedCountry -> supportedCountry, supportedCountry -> Collections.emptyList()));
+
+
+    diagnosisKeys.stream()
+        .filter(DiagnosisKeyService::isDiagnosisKeyValid)
+        .forEach(diagnosisKey -> diagnosisKey.getVisitedCountries().stream()
+            .filter(supportedCountries::contains)
+            .forEach(visitedCountry -> validDiagnosisKeys.get(visitedCountry).add(diagnosisKey)));
+
+    int numberOfDiscardedKeys = diagnosisKeys.size() - validDiagnosisKeys.size();
+    logger.info("Retrieved {} diagnosis key(s). Discarded {} diagnosis key(s) from the result as invalid.",
+        diagnosisKeys.size(), numberOfDiscardedKeys);
+
+    return validDiagnosisKeys;
   }
 
   private List<DiagnosisKey> filterValidDiagnosisKeys(List<DiagnosisKey> diagnosisKeys) {

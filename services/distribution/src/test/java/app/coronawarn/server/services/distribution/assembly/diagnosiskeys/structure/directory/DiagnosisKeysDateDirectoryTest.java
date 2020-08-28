@@ -79,10 +79,10 @@ class DiagnosisKeysDateDirectoryTest {
     outputFile = outputFolder.newFolder();
   }
 
-  private void runDateDistribution(Collection<DiagnosisKey> diagnosisKeys, LocalDateTime distributionTime) {
+  private void runDateDistribution(List<DiagnosisKey> diagnosisKeys, LocalDateTime distributionTime) {
     DiagnosisKeyBundler bundler = new ProdDiagnosisKeyBundler(distributionServiceConfig);
     bundler
-        .setDiagnosisKeys(diagnosisKeys, distributionTime);
+        .setDiagnosisKeys(Map.of("DE",diagnosisKeys), distributionTime);
     DiagnosisKeysDateDirectory dateDirectory = new DiagnosisKeysDateDirectory(bundler, cryptoProvider,
         distributionServiceConfig);
     Directory<WritableOnDisk> outputDirectory = new DirectoryOnDisk(outputFile);
@@ -95,7 +95,7 @@ class DiagnosisKeysDateDirectoryTest {
 
   @Test
   void testCreatesCorrectDirectoryStructureForMultipleDates() {
-    Collection<DiagnosisKey> diagnosisKeys = IntStream.range(0, 3)
+    List<DiagnosisKey> diagnosisKeys = IntStream.range(0, 3)
         .mapToObj(currentDate -> IntStream.range(0, 5)
             .mapToObj(currentHour ->
                 buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3 + currentDate, 0, 0).plusHours(currentHour), 5))
@@ -115,7 +115,7 @@ class DiagnosisKeysDateDirectoryTest {
 
   @Test
   void testDoesNotIncludeCurrentDateInDirectoryStructure() {
-    Collection<DiagnosisKey> diagnosisKeys = IntStream.range(0, 3)
+    List<DiagnosisKey> diagnosisKeys = IntStream.range(0, 3)
         .mapToObj(currentDate -> IntStream.range(0, 5)
             .mapToObj(currentHour ->
                 buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3 + currentDate, 0, 0).plusHours(currentHour), 5))
@@ -137,7 +137,7 @@ class DiagnosisKeysDateDirectoryTest {
   		+ "There seems to be a timing issue with this test because running it individually works, but running it"
   		+ " in a suite will cause it to produce a different output then expected. Further investigation is required here ")
   void testIncludesEmptyDatesInDirectoryStructure() {
-    Collection<DiagnosisKey> diagnosisKeys = IntStream.range(0, 3)
+    List<DiagnosisKey> diagnosisKeys = IntStream.range(0, 3)
         .filter(currentDate -> currentDate != 1)
         .mapToObj(currentDate -> IntStream.range(0, 5)
             .mapToObj(currentHour ->
@@ -158,7 +158,7 @@ class DiagnosisKeysDateDirectoryTest {
 
   @Test
   void testIncludesDatesWithFewerKeysThanThresholdInDirectoryStructure() {
-    Collection<DiagnosisKey> diagnosisKeys = List.of(
+    List<DiagnosisKey> diagnosisKeys = List.of(
         buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3, 1, 0), 5),
         buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 4, 1, 0), 4),
         buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 5, 1, 0), 5))
@@ -177,7 +177,7 @@ class DiagnosisKeysDateDirectoryTest {
 
   @Test
   void testDoesNotIncludeDatesInTheFuture() {
-    Collection<DiagnosisKey> diagnosisKeys = List.of(
+    List<DiagnosisKey> diagnosisKeys = List.of(
         buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3, 1, 0), 5),
         buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 4, 1, 0), 5),
         buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 5, 1, 0), 5))
@@ -198,7 +198,7 @@ class DiagnosisKeysDateDirectoryTest {
     // such that other tests are
     Boolean currentIncompleteDaysConfig = distributionServiceConfig.getIncludeIncompleteDays();
     distributionServiceConfig.setIncludeIncompleteDays(true);
-    Collection<DiagnosisKey> diagnosisKeys = IntStream.range(0, 3)
+    List<DiagnosisKey> diagnosisKeys = IntStream.range(0, 3)
         .mapToObj(currentDate -> IntStream.range(0, 5)
             .mapToObj(currentHour ->
                 buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 3 + currentDate, 0, 0).plusHours(currentHour), 5))

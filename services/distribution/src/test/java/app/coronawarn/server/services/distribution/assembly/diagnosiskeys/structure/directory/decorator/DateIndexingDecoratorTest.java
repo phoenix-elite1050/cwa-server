@@ -35,6 +35,7 @@ import app.coronawarn.server.services.distribution.config.DistributionServiceCon
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -70,7 +71,7 @@ class DateIndexingDecoratorTest {
   @Test
   void excludesCurrentDateFromIndex() {
     List<DiagnosisKey> diagnosisKeys = buildDiagnosisKeys(6, LocalDateTime.of(1970, 1, 4, 0, 0), 5);
-    diagnosisKeyBundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    diagnosisKeyBundler.setDiagnosisKeys(Map.of("DE",diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     DateIndexingDecorator decorator = makeDecoratedDateDirectory(diagnosisKeyBundler);
     decorator.prepare(new ImmutableStack<>().push("DE"));
 
@@ -94,7 +95,7 @@ class DateIndexingDecoratorTest {
     when(svcConfig.getMaximumNumberOfKeysPerBundle()).thenReturn(1);
 
     DiagnosisKeyBundler diagnosisKeyBundler = new ProdDiagnosisKeyBundler(svcConfig);
-    diagnosisKeyBundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 4, 0, 0));
+    diagnosisKeyBundler.setDiagnosisKeys(Map.of("DE",diagnosisKeys), LocalDateTime.of(1970, 1, 4, 0, 0));
 
     DateIndexingDecorator decorator = makeDecoratedDateDirectory(diagnosisKeyBundler);
 

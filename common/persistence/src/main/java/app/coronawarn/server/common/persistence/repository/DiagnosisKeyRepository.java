@@ -45,15 +45,13 @@ public interface DiagnosisKeyRepository extends PagingAndSortingRepository<Diagn
    * Returns all diagnosis keys where visited_countries list contains {@param countryCode} ordered by
    * submission_timestamp.
    *
-   * @param countryCode filter country code.
+   * @param supportedCountries filter country code.
    * @return list of DiagnosisKeys.
    */
 
-  //todo: SELECT * FROM diagnosis_key WHERE :country_code = ANY(visited_countries) ORDER BY submission_timestamp ASC
-  //Map<String,Iterable<DiagnosisKey>> findAllKeysWhereVisitedCountryContains(@Param("list_supported_country")
-  // String supportedCountries);
-  @Query("SELECT * FROM diagnosis_key WHERE :country_code = ANY(visited_countries) ORDER BY submission_timestamp ASC")
-  Iterable<DiagnosisKey> findAllKeysWhereVisitedCountryContains(@Param("country_code") String countryCode);
+  @Query("SELECT * FROM diagnosis_key")
+  Iterable<DiagnosisKey> findAllKeysWhereOriginCountryIsSupported(
+      @Param("supported_countries") String[] supportedCountries);
 
   /**
    * Deletes all entries that have a submission timestamp less or equal than the specified one

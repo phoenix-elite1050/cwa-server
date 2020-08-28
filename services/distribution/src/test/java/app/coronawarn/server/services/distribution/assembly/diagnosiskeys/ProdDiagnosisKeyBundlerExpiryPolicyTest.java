@@ -27,6 +27,7 @@ import app.coronawarn.server.services.distribution.common.Helpers;
 import app.coronawarn.server.services.distribution.config.DistributionServiceConfig;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -53,14 +54,14 @@ class ProdDiagnosisKeyBundlerExpiryPolicyTest {
   @ValueSource(longs = {0L, 24L, 24L + 2L})
   void testLastPeriodOfHourAndSubmissionLessThanDistributionDateTime(long submissionTimestamp) {
     List<DiagnosisKey> diagnosisKeys = Helpers.buildDiagnosisKeys(5, submissionTimestamp, 10);
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 2, 3, 0, 0))).hasSize(10);
   }
 
   @Test
   void testLastPeriodOfHourAndSubmissionEqualsDistributionDateTime() {
     List<DiagnosisKey> diagnosisKeys = Helpers.buildDiagnosisKeys(5, 24L + 3L, 10);
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 2, 3, 0, 0))).hasSize(10);
   }
 
@@ -68,21 +69,21 @@ class ProdDiagnosisKeyBundlerExpiryPolicyTest {
   @ValueSource(longs = {0L, 24L, 24L + 2L, 24L + 3L})
   void testFirstPeriodOfHourAndSubmissionLessThanDistributionDateTime(long submissionTimestamp) {
     List<DiagnosisKey> diagnosisKeys = Helpers.buildDiagnosisKeys(6, submissionTimestamp, 10);
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 2, 4, 0, 0))).hasSize(10);
   }
 
   @Test
   void testFirstPeriodOfHourAndSubmissionEqualsDistributionDateTime() {
     List<DiagnosisKey> diagnosisKeys = Helpers.buildDiagnosisKeys(6, 24L + 4L, 10);
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 2, 4, 0, 0))).hasSize(10);
   }
 
   @Test
   void testLastPeriodOfHourAndSubmissionGreaterDistributionDateTime() {
     List<DiagnosisKey> diagnosisKeys = Helpers.buildDiagnosisKeys(5, 24L + 4L, 10);
-    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    bundler.setDiagnosisKeys(Map.of("DE", diagnosisKeys), LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getDiagnosisKeysForHour(LocalDateTime.of(1970, 1, 2, 4, 0, 0))).hasSize(10);
   }
 }
