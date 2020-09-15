@@ -83,15 +83,54 @@ generate_certificate_thumbprint()
     | grep Fingerprint | sed 's/SHA256 Fingerprint=//' | sed 's/://g' >> "$2"
 }
 
+generate_jks_keystore()
+{
+  keytool -genkey -keyalg EC -keystore "$1" -storepass test1234 -keysize 2048 -alias dummykey \
+    -dname C=X -validity 1 -keypass test1234
+}
+
+import_certificate_to_jks()
+{
+  keytool -importcert -alias efgs_trust_anchor -file "$2" -keystore "$1" -storepass test1234 -noprompt
+}
+
+clean_jks()
+{
+  keytool -delete -keystore "$1" -storepass test1234 -alias dummykey
+}
+
+sign_public_certificate()
+{
+  openssl dgst -sha256 -sign "$1" -out sig.tmp "$2"
+  openssl base64 -in sig.tmp -out "$3" -A
+  rm sig.tmp
+}
 
 generate_private_key private.pem
 extract_public_key private.pem public.pem
 generate_certificate_signing_request private.pem '/CN=CWA Test Certificate' request.csr
 self_sign_certificate_request request.csr private.pem certificate.crt
 
+# Generate EFGS Trust Anchor
+generate_private_key efgs_ta_key.pem
+self_sign_efgs_signing_certificate efgs_ta_key.pem '/CN=CWA Test Certificate/OU=CWA-Team/C=DE' efgs_ta_cert.pem
+generate_jks_keystore efgs-ta.jks
+import_certificate_to_jks efgs-ta.jks efgs_tls_cert.pem
+clean_jks efgs-ta.jks
+
+# Generate EFGS TLS Certificate
+generate_private_key efgs_tls_key.pem
+self_sign_efgs_signing_certificate efgs_tls_key.pem '/CN=CWA Test Certificate/OU=CWA-Team/C=DE' efgs_tls_cert.pem
+generate_certificate_thumbprint efgs_tls_cert.pem efgs_x509_thumbprint.txt
+import_certificate_to_jks efgs-ta.jks efgs_tls_cert.pem
+sign_public_certificate efgs_ta_cert.pem efgs_tls_cert.pem efgs_tls_sign.b64
+
+# Generate EFGS Signing Certificate
 generate_private_key efgs_signing_key.pem
 self_sign_efgs_signing_certificate efgs_signing_key.pem '/CN=CWA Test Certificate/OU=CWA-Team/C=DE' efgs_signing_cert.pem
 generate_certificate_thumbprint efgs_signing_cert.pem efgs_x509_thumbprint.txt
+import_certificate_to_jks efgs-ta.jks efgs_signing_cert.pem
+sign_public_certificate efgs_ta_cert.pem efgs_signing_cert.pem efgs_signing_sign.b64
 
 popd > /dev/null || exit
 popd > /dev/null || exit
