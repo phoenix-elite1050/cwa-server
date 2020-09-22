@@ -27,4 +27,4 @@ spring:
         order: -10
       ssl:
         trust-store: classpath:${SSL_VERIFICATION_TRUSTSTORE_PATH}
-        trust-store-password: classpath:${SSL_VERIFICATION_TRUSTSTORE_PASSWORD}
+        trust-store-password: ${SSL_VERIFICATION_TRUSTSTORE_PASSWORD}
