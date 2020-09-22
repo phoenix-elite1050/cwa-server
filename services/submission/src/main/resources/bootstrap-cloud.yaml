@@ -25,3 +25,6 @@ spring:
       read-timeout: 15000
       config:
         order: -10
+      ssl:
+        trust-store: ${SSL_VERIFICATION_TRUSTSTORE_PATH}
+        trust-store-password: ${SSL_VERIFICATION_TRUSTSTORE_PASSWORD}
