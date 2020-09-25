@@ -26,5 +26,5 @@ spring:
       config:
         order: -10
       ssl:
-        trust-store: ${SSL_VERIFICATION_TRUSTSTORE_PATH}
-        trust-store-password: ${SSL_VERIFICATION_TRUSTSTORE_PASSWORD}
+        trust-store: classpath:/vault/secrets/vault_truststore
+        trust-store-password: 1234abcd!
