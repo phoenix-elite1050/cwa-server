@@ -25,6 +25,3 @@ spring:
       read-timeout: 15000
       config:
         order: -10
-      ssl:
-        trust-store: classpath:/vault/secrets/vault_truststore
-        trust-store-password: 1234abcd!
