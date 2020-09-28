@@ -1,4 +1,4 @@
-FROM openjdk:12 as build
+FROM openjdk:11 as build
 ARG WORK_DIR=/build
 
 # copy the pom and config files first (which do not change very often)
@@ -26,7 +26,7 @@ RUN ${WORK_DIR}/mvnw --batch-mode -DskipTests=true --file ${WORK_DIR}/pom.xml ${
 RUN cp ${WORK_DIR}/services/submission/target/submission-*.jar /usr/sap/submission-service/submission.jar
 RUN cp ${WORK_DIR}/scripts/DpkgHelper.java /DpkgHelper.java
 
-FROM gcr.io/distroless/java:12
+FROM gcr.io/distroless/java:11
 COPY --from=build /DpkgHelper.java .
 COPY --from=build /usr/sap/submission-service/submission.jar .
 RUN ["java", "DpkgHelper.java"]
