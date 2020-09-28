@@ -8,10 +8,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Update to OpenJDK 11
+          name: Update to OpenJDK 12
           command: |
-            sudo apt-get install openjdk-11-jre
-            sudo update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+            sudo apt-get install openjdk-12-jre
+            sudo update-alternatives --set java /usr/lib/jvm/java-12-openjdk-amd64/bin/java
             java -version
       - run:
           name: Generate cumulative pom.xml checksum
@@ -25,7 +25,7 @@ jobs:
       - run:
           name: Analyze on SonarCloud
           command: |
-            export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+            export JAVA_HOME=/usr/lib/jvm/java-12-openjdk-amd64
             ./mvnw --batch-mode verify sonar:sonar --fail-never
       - save_cache:
           paths:
