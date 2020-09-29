@@ -15,15 +15,15 @@ spring:
         default-context: ''
         profiles: cloud
       fail-fast: true
-      authentication: CERT
-      ssl:
-        trust-store: ${SSL_VERIFICATION_TRUSTSTORE_PATH}
-        trust-store-password: ${SSL_VERIFICATION_TRUSTSTORE_PASSWORD}
-        cert-auth-path: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
-#      kubernetes:
-#        role: ${VAULT_ROLE}
-#        kubernetes-path: kubernetes
-#        service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      authentication: KUBERNETES
+#      ssl:
+#        trust-store: ${SSL_VERIFICATION_TRUSTSTORE_PATH}
+#        trust-store-password: ${SSL_VERIFICATION_TRUSTSTORE_PASSWORD}
+#        cert-auth-path: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+      kubernetes:
+        role: ${VAULT_ROLE}
+        kubernetes-path: kubernetes
+        service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token
       uri: ${VAULT_URI}
       connection-timeout: 5000
       read-timeout: 15000
