@@ -112,7 +112,11 @@ public abstract class DiagnosisKeyBundler {
    */
   public Set<LocalDate> getDatesWithDistributableDiagnosisKeys(String country) {
     if (isCountrySupported(country)) {
-      return this.distributableDiagnosisKeys.get(country).keySet().stream()
+      final Map<LocalDateTime, List<DiagnosisKey>> localDateTimeListMap = this.distributableDiagnosisKeys.get(country);
+      logger.info("Country from distributable diagnosis keys:{} and map: {}", country, localDateTimeListMap);
+      final Set<LocalDateTime> localDateTimes = localDateTimeListMap.keySet();
+      logger.info("Local date times from country:{}", localDateTimes);
+      return localDateTimes.stream()
           .map(LocalDateTime::toLocalDate)
           .filter(date -> numberOfKeysForDateBelowMaximum(date, country))
           .collect(Collectors.toSet());
