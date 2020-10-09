@@ -19,6 +19,7 @@ spring:
       ssl:
         trust-store: ${SSL_VERIFICATION_TRUSTSTORE_PATH}
         trust-store-password: 1234abcd!
+        service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token
       kubernetes:
         role: ${VAULT_ROLE}
         kubernetes-path: kubernetes
