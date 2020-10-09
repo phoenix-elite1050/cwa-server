@@ -26,7 +26,7 @@ RUN ${WORK_DIR}/mvnw --batch-mode -DskipTests=true --file ${WORK_DIR}/pom.xml ${
 RUN cp ${WORK_DIR}/services/submission/target/submission-*.jar /usr/sap/submission-service/submission.jar
 RUN cp ${WORK_DIR}/scripts/DpkgHelper.java /DpkgHelper.java
 
-FROM sapmachine:11.0.8
+FROM sapmachine:latest
 COPY --from=build /DpkgHelper.java .
 COPY --from=build /usr/sap/submission-service/submission.jar .
 #RUN ["java", "DpkgHelper.java"]
