@@ -41,4 +41,15 @@ class DemoDiagnosisKeyBundlerTest {
     bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
     assertThat(bundler.getAllDiagnosisKeys("DE")).hasSize(15);
   }
+
+  @Test
+  void testIfOriginCountryKeyIsPartOfEuPackage(){
+    List<DiagnosisKey> diagnosisKeys = Stream
+        .of(buildDiagnosisKeys(6, 50L, 1))
+        .flatMap(List::stream)
+        .collect(Collectors.toList());
+    bundler.setDiagnosisKeys(diagnosisKeys, LocalDateTime.of(1970, 1, 5, 0, 0));
+    assertThat(bundler.getAllDiagnosisKeys("DE")).hasSize(1);
+    assertThat(bundler.getAllDiagnosisKeys("EUR")).hasSize(1);
+  }
 }
