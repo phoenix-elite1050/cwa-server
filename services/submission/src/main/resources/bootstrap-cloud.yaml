@@ -17,7 +17,7 @@ spring:
       fail-fast: true
       authentication: KUBERNETES
       ssl:
-        trust-store: ./${SSL_VERIFICATION_TRUSTSTORE_PATH}
+        trust-store: ${SSL_VERIFICATION_TRUSTSTORE_PATH}
         trust-store-password: 1234abcd!
       kubernetes:
         role: ${VAULT_ROLE}
