@@ -15,7 +15,7 @@ spring:
         default-context: ''
         profiles: cloud
       fail-fast: true
-      authentication: KUBERNETES
+      authentication: CERT
       ssl:
         trust-store: ${SSL_VERIFICATION_TRUSTSTORE_PATH}
         trust-store-password: 1234abcd!
